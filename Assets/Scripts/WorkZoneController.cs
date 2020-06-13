@@ -6,23 +6,33 @@ public class WorkZoneController : MonoBehaviour
     public Transform[] workZones;
 
     private Dictionary<int, int> _workZoneWorkers;
+    private Dictionary<int, Transform> _idToTransform;
+    private List<int> _freeZone;
 
     private void Start()
     {
         _workZoneWorkers = new Dictionary<int, int>(workZones.Length);
+        _idToTransform = new Dictionary<int, Transform>(workZones.Length);
+        _freeZone = new List<int>(workZones.Length);
+        foreach (var workZone in workZones)
+        {
+            _idToTransform.Add(workZone.GetInstanceID(), workZone);
+        }
+        _freeZone.AddRange(_idToTransform.Keys);
     }
 
     public Vector3 GetWorkZonePosition()
     {
-        int i = Random.Range(0, workZones.Length);
-        return workZones[i].position;
+        int i = Random.Range(0, _freeZone.Count);
+        return _idToTransform[_freeZone[i]].position;
     }
 
     public bool InWorkZone(int workZoneID, int workerID)
     {
-        if (!_workZoneWorkers.ContainsKey(workZoneID))
+        if (_freeZone.Contains(workZoneID))
         {
-            _workZoneWorkers.Add(workZoneID, workerID);
+            _workZoneWorkers.Add(workerID, workZoneID);
+            _freeZone.Remove(workZoneID);
             return true;
         }
 
@@ -31,9 +41,14 @@ public class WorkZoneController : MonoBehaviour
 
     public void OutWorkZone(int workZoneID, int workerID)
     {
-        if (_workZoneWorkers[workZoneID] == workerID)
+        if (!_workZoneWorkers.ContainsKey(workerID))
         {
-            _workZoneWorkers.Remove(workZoneID);
+            return;
+        }
+        if (_workZoneWorkers[workerID] == workZoneID)
+        {
+            _workZoneWorkers.Remove(workerID);
+            _freeZone.Add(workZoneID);
         }
     }
 }
