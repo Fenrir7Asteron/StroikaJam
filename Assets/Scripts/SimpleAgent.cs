@@ -19,6 +19,7 @@ public class SimpleAgent : MonoBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
         _sleepPlace = newRandomPos();
+        _agent.SetDestination(workTarget.position);
     }
 
     private void Update()
