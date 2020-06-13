@@ -15,6 +15,7 @@ public class SimpleAgent : MonoBehaviour
     public Animator animator;
     public AudioSource workAudio;
     public AudioSource playerAudio;
+    public AudioSource drinkAudio;
     
     public Vector2 minPosForSleepPlace;
     public Vector2 maxPosForSleepPlace;
@@ -25,6 +26,7 @@ public class SimpleAgent : MonoBehaviour
     protected bool _goToSleep = false;
     protected IEnumerator _currentWalk;
     protected String _currentWorkAnimation;
+    protected bool _startSleepAnimatons;
 
     private void Start()
     {
@@ -53,8 +55,10 @@ public class SimpleAgent : MonoBehaviour
             }
         }
 
-        if (!_walking && !_atWork)
+        if (!_startSleepAnimatons && !_walking && !_atWork)
         {
+            _startSleepAnimatons = true;
+            drinkAudio.Play();
             animator.SetBool("sleep", true);
         }
         
@@ -82,6 +86,8 @@ public class SimpleAgent : MonoBehaviour
         {
             playerAudio.Play();
             _workedTime = 0f;
+            _startSleepAnimatons = false;
+            drinkAudio.Stop();
             animator.SetBool("sleep", false);
             if (!_atWork && (!_walking || _goToSleep))
             {
