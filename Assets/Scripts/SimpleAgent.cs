@@ -70,7 +70,7 @@ public class SimpleAgent : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _workedTime = 0f;
-            if (!_walking || _goToSleep)
+            if (!_atWork && (!_walking || _goToSleep))
             {
                 if (_goToSleep)
                 {
@@ -81,6 +81,14 @@ public class SimpleAgent : MonoBehaviour
                 _currentWalk = Move(workZoneController.GetWorkZonePosition());
                 StartCoroutine(_currentWalk);
             }
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (_atWork && other.CompareTag("Player"))
+        {
+            _workedTime = 0f;
         }
     }
 
@@ -101,6 +109,10 @@ public class SimpleAgent : MonoBehaviour
     {
         _walking = true;
         List<Vector3> path = getPath(to);
+        while (path == null) // TODO: костыль
+        {
+            path = getPath(RandomSleepPosition());
+        }
         foreach (var nextPos in path)
         {
             while (transform.position != nextPos)

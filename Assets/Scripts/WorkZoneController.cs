@@ -24,6 +24,10 @@ public class WorkZoneController : MonoBehaviour
     public Vector3 GetWorkZonePosition()
     {
         int i = Random.Range(0, _freeZone.Count);
+        if (_freeZone.Count <= 0) // TODO: костыль
+        {
+            return workZones[0].position;
+        }
         return _idToTransform[_freeZone[i]].position;
     }
 
