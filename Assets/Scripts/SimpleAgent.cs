@@ -53,7 +53,7 @@ public class SimpleAgent : MonoBehaviour
     {
         if (other.CompareTag("WorkZone"))
         {
-            bool isFree = workZoneController.InWorkZone(other.GetInstanceID(), GetInstanceID());
+            bool isFree = workZoneController.InWorkZone(other.transform.GetInstanceID(), GetInstanceID());
             if (!isFree)
             {
                 StopCoroutine(_currentWalk);
@@ -82,12 +82,12 @@ public class SimpleAgent : MonoBehaviour
             }
         }
     }
-    
-    private void OnTriggerExit(Collider other)
+
+    private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("WorkZone"))
         {
-            workZoneController.OutWorkZone(other.GetInstanceID(), GetInstanceID());
+            workZoneController.OutWorkZone(other.transform.GetInstanceID(), GetInstanceID());
         }
     }
 

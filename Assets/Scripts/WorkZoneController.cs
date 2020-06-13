@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class WorkZoneController : MonoBehaviour
@@ -11,28 +9,20 @@ public class WorkZoneController : MonoBehaviour
 
     private void Start()
     {
-        _workZoneWorkers = new Dictionary<int, int>(workZones.Length); ;
+        _workZoneWorkers = new Dictionary<int, int>(workZones.Length);
     }
 
     public Vector3 GetWorkZonePosition()
     {
-        foreach (var workZone in workZones)
-        {
-            if (!_workZoneWorkers.ContainsValue(workZone.GetInstanceID()))
-            {
-                return workZone.position;
-            }
-        }
-        
-        Debug.LogError("Somehow all work zone is busy");
-        return Vector3.zero;
+        int i = Random.Range(0, workZones.Length);
+        return workZones[i].position;
     }
 
     public bool InWorkZone(int workZoneID, int workerID)
     {
-        if (!_workZoneWorkers.ContainsValue(workZoneID))
+        if (!_workZoneWorkers.ContainsKey(workZoneID))
         {
-            _workZoneWorkers.Add(workerID, workZoneID);
+            _workZoneWorkers.Add(workZoneID, workerID);
             return true;
         }
 
@@ -41,11 +31,9 @@ public class WorkZoneController : MonoBehaviour
 
     public void OutWorkZone(int workZoneID, int workerID)
     {
-        if(!_workZoneWorkers.ContainsKey(workerID))
-            return;
-        if (_workZoneWorkers[workerID] == workZoneID)
+        if (_workZoneWorkers[workZoneID] == workerID)
         {
-            _workZoneWorkers.Remove(workerID);
+            _workZoneWorkers.Remove(workZoneID);
         }
     }
 }
