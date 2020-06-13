@@ -12,6 +12,7 @@ public class SimpleAgent : MonoBehaviour
     public WorkZoneController workZoneController;
     public float delayBetweenStep = 0.3f;
     public float timeBeforeTired = 5f;
+    public Animator animator;
     
     public Vector2 minPosForSleepPlace;
     public Vector2 maxPosForSleepPlace;
@@ -21,6 +22,7 @@ public class SimpleAgent : MonoBehaviour
     private bool _atWork = false;
     private bool _goToSleep = false;
     private IEnumerator _currentWalk;
+    private String _currentWorkAnimation;
 
     private void Start()
     {
@@ -41,11 +43,17 @@ public class SimpleAgent : MonoBehaviour
             _workedTime += Time.deltaTime;
             if (_workedTime > timeBeforeTired)
             {
+                animator.SetBool(_currentWorkAnimation, false);
                 _atWork = false;
                 _goToSleep = true;
                 _currentWalk = Move(RandomSleepPosition());
                 StartCoroutine(_currentWalk);
             }
+        }
+
+        if (!_walking && !_atWork)
+        {
+            animator.SetBool("sleep", true);
         }
         
     }
@@ -63,6 +71,7 @@ public class SimpleAgent : MonoBehaviour
             }
             else
             {
+                StartWorkAnimation();
                 _atWork = true;
             }
         }
@@ -70,6 +79,7 @@ public class SimpleAgent : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _workedTime = 0f;
+            animator.SetBool("sleep", false);
             if (!_atWork && (!_walking || _goToSleep))
             {
                 if (_goToSleep)
@@ -108,11 +118,14 @@ public class SimpleAgent : MonoBehaviour
     private IEnumerator Move(Vector3 to)
     {
         _walking = true;
+        animator.SetBool("isWalking", true);
+        
         List<Vector3> path = getPath(to);
         while (path == null) // TODO: костыль
         {
             path = getPath(RandomSleepPosition());
         }
+        
         foreach (var nextPos in path)
         {
             while (transform.position != nextPos)
@@ -121,7 +134,8 @@ public class SimpleAgent : MonoBehaviour
                 transform.position += GetDirection(transform.position, nextPos);
             }
         }
-
+        
+        animator.SetBool("isWalking", false);
         _walking = false;
     }
 
@@ -131,17 +145,21 @@ public class SimpleAgent : MonoBehaviour
         {
             if (currentPosition.y > nextPosition.y)
             {
+                transform.eulerAngles = new Vector3(0f, 0f, -90f);
                 return Vector3.down;
             }
-
+            
+            transform.eulerAngles = new Vector3(0f, 0f, 90f);
             return Vector3.up;
         }
 
         if (currentPosition.x > nextPosition.x)
         {
+            transform.eulerAngles = new Vector3(0f, 0f, 180f);
             return Vector3.left;
         }
-
+        
+        transform.eulerAngles = new Vector3(0f, 0f, 0f);
         return Vector3.right;
     }
     
@@ -150,5 +168,12 @@ public class SimpleAgent : MonoBehaviour
         float x = Random.Range(minPosForSleepPlace.x, maxPosForSleepPlace.x);
         float y = Random.Range(minPosForSleepPlace.y, maxPosForSleepPlace.y);
         return new Vector3(x, y, 0);
+    }
+
+    private void StartWorkAnimation()
+    {
+        var type = Random.Range(1, 3);
+        _currentWorkAnimation = type == 1 ? "working1" : "working2";
+        animator.SetBool(_currentWorkAnimation, true);
     }
 }
