@@ -1,102 +1,141 @@
-﻿using UnityEngine;
-using UnityEngine.AI;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Toolbox;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 public class SimpleAgent : MonoBehaviour
 {
-    public Transform workTarget;
+    public Tilemap wallTilemap;
+    public WorkZoneController workZoneController;
+    public float delayBetweenStep = 0.3f;
     public float timeBeforeTired = 5f;
+    
     public Vector2 minPosForSleepPlace;
     public Vector2 maxPosForSleepPlace;
-
-    private NavMeshAgent _agent;
-
+    
+    private bool _walking = false;
     private float _workedTime = 0f;
-    private bool _freezeWorkedTime = false;
-    private bool _atWork = true;
-    private Vector3 _sleepPlace;
+    private bool _atWork = false;
+    private bool _goToSleep = false;
+    private IEnumerator _currentWalk;
 
-    void Start()
+    private void Start()
     {
-        _agent = GetComponent<NavMeshAgent>();
-        _sleepPlace = newRandomPos();
-        _agent.SetDestination(workTarget.position);
+        transform.position = getPath(Vector3.zero)[0]; // fix start position
     }
 
     private void Update()
     {
-        //Debug.Log(_workedTime);
-        if (!_freezeWorkedTime)
+        if (!_walking && !_atWork && _workedTime < timeBeforeTired)
         {
-            _workedTime += Time.deltaTime;
-            if (_workedTime >= timeBeforeTired)
-            {
-                _freezeWorkedTime = true;
-                _agent.SetDestination(_sleepPlace);
-                _sleepPlace = newRandomPos();
-                _atWork = false;
-            }
+            _currentWalk = Move(workZoneController.GetWorkZonePosition());
+            StartCoroutine(_currentWalk);
         }
 
-        CheckIfWorkerStopped();
+        if (!_walking && _atWork)
+        {
+            _workedTime += Time.deltaTime;
+            if (_workedTime > timeBeforeTired)
+            {
+                _atWork = false;
+                _goToSleep = true;
+                _currentWalk = Move(RandomSleepPosition());
+                StartCoroutine(_currentWalk);
+            }
+        }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.CompareTag("WorkZone"))
+        {
+            bool isFree = workZoneController.InWorkZone(other.GetInstanceID(), GetInstanceID());
+            if (!isFree)
+            {
+                StopCoroutine(_currentWalk);
+                _currentWalk = Move(workZoneController.GetWorkZonePosition());
+                StartCoroutine(_currentWalk);
+            }
+            else
+            {
+                _atWork = true;
+            }
+        }
+        
         if (other.CompareTag("Player"))
         {
-            _atWork = true;
             _workedTime = 0f;
-            _agent.SetDestination(workTarget.position);
-            
-            if (transform.rotation.z > Mathf.Epsilon) 
+            if (!_walking || _goToSleep)
             {
-                transform.Rotate(0f, 0f, -90f, Space.World); // sleep animation off
+                if (_goToSleep)
+                {
+                    StopCoroutine(_currentWalk);
+                    _goToSleep = false;
+                }
+
+                _currentWalk = Move(workZoneController.GetWorkZonePosition());
+                StartCoroutine(_currentWalk);
             }
         }
     }
-
-    private void OnTriggerStay2D(Collider2D other)
+    
+    private void OnTriggerExit(Collider other)
     {
-        if (!_freezeWorkedTime && other.CompareTag("Player"))
+        if (other.CompareTag("WorkZone"))
         {
-            _workedTime = 0f;
-            _freezeWorkedTime = true;
+            workZoneController.OutWorkZone(other.GetInstanceID(), GetInstanceID());
         }
     }
 
-    private Vector3 newRandomPos()
+    private List<Vector3> getPath(Vector3 to)
+    {
+        return AStar.FindPathClosest(wallTilemap, transform.position, to);
+    }
+
+    private IEnumerator Move(Vector3 to)
+    {
+        _walking = true;
+        List<Vector3> path = getPath(to);
+        foreach (var nextPos in path)
+        {
+            while (transform.position != nextPos)
+            {
+                yield return new WaitForSeconds(delayBetweenStep);
+                transform.position += GetDirection(transform.position, nextPos);
+            }
+        }
+
+        _walking = false;
+    }
+
+    private Vector3 GetDirection(Vector3 currentPosition, Vector3 nextPosition)
+    {
+        if (Equals(currentPosition.x, nextPosition.x))
+        {
+            if (currentPosition.y > nextPosition.y)
+            {
+                return Vector3.down;
+            }
+
+            return Vector3.up;
+        }
+
+        if (currentPosition.x > nextPosition.x)
+        {
+            return Vector3.left;
+        }
+
+        return Vector3.right;
+    }
+    
+    private Vector3 RandomSleepPosition()
     {
         float x = Random.Range(minPosForSleepPlace.x, maxPosForSleepPlace.x);
         float y = Random.Range(minPosForSleepPlace.y, maxPosForSleepPlace.y);
         return new Vector3(x, y, 0);
     }
-
-    private void CheckIfWorkerStopped()
-    {
-        if (_agent.remainingDistance <= _agent.stoppingDistance)
-        {
-            if (Mathf.Abs (_agent.velocity.sqrMagnitude) < Mathf.Epsilon)
-            {
-                if (_atWork) 
-                {
-                    _freezeWorkedTime = false;
-                }
-                else 
-                {
-                    if (transform.rotation.z < Mathf.Epsilon) 
-                    {
-                        transform.Rotate(0f, 0f, 90f, Space.World); // enable sleep animation
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (transform.rotation.z > Mathf.Epsilon) // somehow sleep animations start before move
-            {
-                transform.Rotate(0f, 0f, -90f, Space.World); // sleep animation off
-            }
-        }
-    }
-
 }
