@@ -13,21 +13,22 @@ public class SimpleAgent : MonoBehaviour
     public float delayBetweenStep = 0.3f;
     public float timeBeforeTired = 5f;
     public Animator animator;
+    public AudioSource workAudio;
+    public AudioSource playerAudio;
     
     public Vector2 minPosForSleepPlace;
     public Vector2 maxPosForSleepPlace;
     
-    private bool _walking = false;
-    private float _workedTime = 0f;
-    private bool _atWork = false;
-    private bool _goToSleep = false;
-    private IEnumerator _currentWalk;
-    private String _currentWorkAnimation;
+    protected bool _walking = false;
+    protected float _workedTime = 0f;
+    protected bool _atWork = false;
+    protected bool _goToSleep = false;
+    protected IEnumerator _currentWalk;
+    protected String _currentWorkAnimation;
 
     private void Start()
     {
         transform.position = getPath(Vector3.zero)[0]; // fix start position
-        Debug.Log($"{gameObject.name} is {GetInstanceID()}");
     }
 
     private void Update()
@@ -44,6 +45,7 @@ public class SimpleAgent : MonoBehaviour
             if (_workedTime > timeBeforeTired)
             {
                 animator.SetBool(_currentWorkAnimation, false);
+                workAudio.Stop();
                 _atWork = false;
                 _goToSleep = true;
                 _currentWalk = Move(RandomSleepPosition());
@@ -78,6 +80,7 @@ public class SimpleAgent : MonoBehaviour
         
         if (other.CompareTag("Player"))
         {
+            playerAudio.Play();
             _workedTime = 0f;
             animator.SetBool("sleep", false);
             if (!_atWork && (!_walking || _goToSleep))
@@ -107,6 +110,11 @@ public class SimpleAgent : MonoBehaviour
         if (other.CompareTag("WorkZone"))
         {
             workZoneController.OutWorkZone(other.transform.GetInstanceID(), GetInstanceID());
+        }
+
+        if (other.CompareTag("Player"))
+        {
+            playerAudio.Stop();
         }
     }
 
@@ -170,10 +178,7 @@ public class SimpleAgent : MonoBehaviour
         return new Vector3(x, y, 0);
     }
 
-    private void StartWorkAnimation()
+    protected virtual void StartWorkAnimation()
     {
-        var type = Random.Range(1, 3);
-        _currentWorkAnimation = type == 1 ? "working1" : "working2";
-        animator.SetBool(_currentWorkAnimation, true);
     }
 }

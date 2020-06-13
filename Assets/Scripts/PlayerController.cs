@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 prevTargetPos;
     public float speed;
     public float nextWaypointDistance = Mathf.Epsilon;
+    public Animator animator;
 
     private Vector3 dir;
 
@@ -63,9 +64,12 @@ public class PlayerController : MonoBehaviour
         {
             reachedEndOfPath = true;
             needWaypoint = false;
+            animator.SetBool("walk", false);
             return;
-        } else
+        }
+        else
         {
+            animator.SetBool("walk", true);
             reachedEndOfPath = false;
         }
 
@@ -78,13 +82,11 @@ public class PlayerController : MonoBehaviour
             dest.z = transform.position.z;
             var duration = (dest - transform.position).magnitude / speed;
             curMove = DOTween.To(
-                ()=> transform.position,
-                x=> transform.position = x,
-                dest, duration)
+                    () => transform.position,
+                    x => transform.position = x,
+                    dest, duration)
                 .SetEase(Ease.Linear)
-                .OnKill(() => {
-                    needWaypoint = true;
-                });
+                .OnKill(() => { needWaypoint = true; });
             Debug.Log("DOne");
         }
     }
