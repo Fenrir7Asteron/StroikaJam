@@ -147,7 +147,7 @@ public class SimpleAgent : MonoBehaviour
         List<Vector3> path = getPath(to);
         while (path == null) // TODO: костыль
         {
-            path = getPath(RandomSleepPosition());
+            path = getPath(workZoneController.GetWorkZonePosition());
         }
         
         foreach (var nextPos in path)
