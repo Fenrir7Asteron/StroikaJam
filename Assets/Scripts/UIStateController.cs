@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using DG.Tweening;
 using UnityEngine.UI;
 
 public class UIStateController : MonoBehaviour
@@ -28,15 +29,19 @@ public class UIStateController : MonoBehaviour
     public GameObject finishBtn;
 
     public GameObject finishText;
+    private bool withSec = false;
 
     public GameObject bigStar1;
     public GameObject bigStar2;
     public GameObject bigStar3;
 
+    public GameObject fade;
+
     private float localTime = 0.0f;
 
     void Start()
     {
+        Time.timeScale = 1.0f;
         levelSign.GetComponent<TextMeshProUGUI>().text = getLevelText(localTime);
         finishText.GetComponent<TextMeshProUGUI>().alpha = 0;
         bigStar1.GetComponent<Image>().color = new Color(1, 1, 1, 0);
@@ -81,6 +86,9 @@ public class UIStateController : MonoBehaviour
 
     public void StartLevel()
     {
+        withSec = true;
+        localTime = -0.0001f;
+        Time.timeScale = 1.0f;
         state = State.Gameplay;
         destMark.GetComponent<MoveToClick>().active = true;
         Destroy(buildbtn);
@@ -97,6 +105,12 @@ public class UIStateController : MonoBehaviour
     // This is the greatest amount of copypaste i've ever done :( 
     public void FinishLevel()
     {
+        var fadeImg = fade.GetComponent<Image>();
+        DOTween.To(()=> fadeImg.color.a,
+                    x=> fadeImg.color = new Color(fadeImg.color.r, fadeImg.color.g, fadeImg.color.b, x),
+                    0.7f, 0.2f);
+
+        withSec = false;
         state = State.GameOver;
         destMark.GetComponent<MoveToClick>().active = false;
         finishText.GetComponent<TextMeshProUGUI>().alpha = 255;
@@ -148,6 +162,9 @@ public class UIStateController : MonoBehaviour
 
     string getLevelText(float time)
     {
-        return "LEVEL " + levelIndex + " :: " + (timeForLevel - Mathf.Floor(time)) + " SEC";
+        if (withSec)
+            return "LEVEL " + levelIndex + " :: " + (timeForLevel - Mathf.Floor(time)) + " SEC";
+        else
+            return "LEVEL " + levelIndex;
     }
 }
