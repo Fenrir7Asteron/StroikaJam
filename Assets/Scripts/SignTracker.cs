@@ -26,12 +26,21 @@ public class SignTracker : MonoBehaviour
     [SerializeField]
     int thirdStartAt = 15;
     
-    public int currentCount = 0;
+    private int currentCount = 0;
     int prevCurrentCount = -1;
 
+    public bool active = true;
+
+    void Start()
+    {
+        Reset();
+    }
     
     void Update()
     {
+        if (!active)
+            return;
+
         star1.GetComponent<SpriteBinState>().on = currentCount >= firstStarAt;
         star2.GetComponent<SpriteBinState>().on = currentCount >= secondStarAt;
         star3.GetComponent<SpriteBinState>().on = currentCount >= thirdStartAt;
@@ -50,5 +59,24 @@ public class SignTracker : MonoBehaviour
                currentCount >= secondStarAt ? 2 : 
                currentCount >= firstStarAt  ? 1 : 
                                               0 ;
+    }
+
+    public void Reset()
+    {
+        currentCount = 0;
+        prevCurrentCount = 0;
+        progressText.GetComponent<TextMeshProUGUI>().text = currentCount + "/" + firstStarAt;
+    }
+
+    public void AddDoneWork(int count = 1)
+    {
+        if (!active)
+            return;
+        currentCount += count;
+    }
+
+    public int GetCurrentCount()
+    {
+        return currentCount;
     }
 }

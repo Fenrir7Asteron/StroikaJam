@@ -8,23 +8,26 @@ public class MoveToClick : MonoBehaviour
 
     public Vector3 offset;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public bool active = false;
 
     // Update is called once per frame
     void Update()
     {
+        if (!active)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
-            var newPos = cam.ScreenToWorldPoint(Input.mousePosition);
-            newPos.x = Mathf.Round(newPos.x);
-            newPos.y = Mathf.Round(newPos.y);
-            newPos.z = transform.position.z;
+            var midPos = cam.ScreenToWorldPoint(Input.mousePosition);
+            midPos.x = Mathf.Round(midPos.x);
+            midPos.y = Mathf.Round(midPos.y);
+            midPos.z = transform.position.z;
 
-            transform.position = newPos + offset;
+            var offPos = new Vector3(0, 0, 0);
+            offPos.x = Mathf.Sign(midPos.x) * offset.x;
+            offPos.y = Mathf.Sign(midPos.y) * offset.y;
+
+            transform.position = midPos - offPos;
 
         }
         

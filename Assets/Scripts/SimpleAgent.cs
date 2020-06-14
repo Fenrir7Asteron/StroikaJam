@@ -46,7 +46,7 @@ public class SimpleAgent : MonoBehaviour
         if (_completionTime >= timeForDoneWork)
         {
             _completionTime = 0.0f;
-            workCollector.GetComponent<SignTracker>().currentCount++;
+            workCollector.GetComponent<SignTracker>().AddDoneWork();
         }
 
         if (!_walking && !_atWork && _workedTime < timeBeforeTired)
