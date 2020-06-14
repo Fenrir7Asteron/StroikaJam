@@ -13,6 +13,8 @@ public class SimpleAgent : MonoBehaviour
     public float delayBetweenStep = 0.3f;
     public float timeBeforeTired = 5f;
     public Animator animator;
+    public GameObject workCollector;
+    public float timeForDoneWork = 6f;
     
     public AudioSource workAudio;
     public AudioSource[] playerAudios;
@@ -25,6 +27,7 @@ public class SimpleAgent : MonoBehaviour
     
     protected bool _walking = false;
     protected float _workedTime = 0f;
+    protected float _completionTime = 0f;
     protected bool _atWork = false;
     protected bool _goToSleep = false;
     protected IEnumerator _currentWalk;
@@ -40,6 +43,12 @@ public class SimpleAgent : MonoBehaviour
 
     private void Update()
     {
+        if (_completionTime >= timeForDoneWork)
+        {
+            _completionTime = 0.0f;
+            workCollector.GetComponent<SignTracker>().currentCount++;
+        }
+
         if (!_walking && !_atWork && _workedTime < timeBeforeTired)
         {
             _currentWalk = Move(workZoneController.GetWorkZonePosition());
@@ -49,6 +58,7 @@ public class SimpleAgent : MonoBehaviour
         if (!_walking && _atWork)
         {
             _workedTime += Time.deltaTime;
+            _completionTime += Time.deltaTime;
             if (_workedTime > timeBeforeTired)
             {
                 animator.SetBool(_currentWorkAnimation, false);
