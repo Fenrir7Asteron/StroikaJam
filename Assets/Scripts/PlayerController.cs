@@ -40,7 +40,13 @@ public class PlayerController : MonoBehaviour
 
     void OnPathComplete(Path p)
     {
-        if (!p.error)
+        if (p.error)
+            return;
+
+        var endPos = (Vector2)p.vectorPath[p.vectorPath.Count - 1];
+        var dist = Vector2.Distance(endPos, (Vector2)target.position);
+
+        if (dist < 0.001f)
         {
             path = p;
             currentWaypoint = 0;
