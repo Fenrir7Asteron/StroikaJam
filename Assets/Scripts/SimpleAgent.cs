@@ -15,7 +15,7 @@ public class SimpleAgent : MonoBehaviour
     public Animator animator;
     
     public AudioSource workAudio;
-    public AudioSource playerAudio;
+    public AudioSource[] playerAudios;
     public AudioSource drinkAudio;
     public AudioSource screamAudio;
     public AudioSource openBottle;
@@ -30,10 +30,12 @@ public class SimpleAgent : MonoBehaviour
     protected IEnumerator _currentWalk;
     protected String _currentWorkAnimation;
     protected bool _startSleepAnimatons;
+    protected AudioSource _playerAudio;
 
     private void Start()
     {
         transform.position = getPath(Vector3.zero)[0]; // fix start position
+        _playerAudio = playerAudios[0];
     }
 
     private void Update()
@@ -87,9 +89,11 @@ public class SimpleAgent : MonoBehaviour
         
         if (other.CompareTag("Player"))
         {
-            if (!playerAudio.isPlaying)
+            if (!_playerAudio.isPlaying)
             {
-                playerAudio.Play();
+                var index = Random.Range(0, playerAudios.Length);
+                _playerAudio = playerAudios[index];
+                _playerAudio.Play();
             }
 
             if (!screamAudio.isPlaying)

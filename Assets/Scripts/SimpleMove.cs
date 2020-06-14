@@ -34,7 +34,7 @@ public class SimpleMove : MonoBehaviour
                 rotateVector += new Vector3(0f, 0f, 180f);
             }
 
-            Debug.Log(rotateVector);
+
             transform.eulerAngles = rotateVector;
         }
     }
