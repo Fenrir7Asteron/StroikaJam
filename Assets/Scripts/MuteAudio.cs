@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,11 @@ public class MuteAudio : MonoBehaviour
 {
     public GameObject soundButton;
     public GameObject noSoundButton;
+
+    public void Start()
+    {
+        AudioListener.volume = 1;
+    }
 
     public void MuteAudioAndChangeButton()
     {

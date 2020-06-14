@@ -27,6 +27,9 @@ public class UIStateController : MonoBehaviour
 
     public GameObject repeatBtn;
     public GameObject finishBtn;
+    
+    public AudioSource win;
+    public AudioSource lose;
 
     public GameObject finishText;
     private bool withSec = false;
@@ -122,9 +125,6 @@ public class UIStateController : MonoBehaviour
         repeatBtn.GetComponent<Image>().color = new Color(1, 1, 1, 1);
         repeatBtn.GetComponent<Button>().interactable = true;
 
-        finishBtn.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-        finishBtn.GetComponent<Button>().interactable = true;
-        
         // Show up the star gauge
         int[] starStat = new int[3] { 3, 3, 3 };
         if (sign1 != null)
@@ -139,9 +139,18 @@ public class UIStateController : MonoBehaviour
             minCount = minCount > starStat[i] ? starStat[i] : minCount;
 
         if (minCount == 0)
-            finishText.GetComponent<TextMeshProUGUI>().text = "Time is up";
+        {
+            finishText.GetComponent<TextMeshProUGUI>().text = "You lost!";
+            lose.Play();
+        }
         else
-            finishText.GetComponent<TextMeshProUGUI>().text = "Plan complete";
+        {
+            finishText.GetComponent<TextMeshProUGUI>().text = "You win!";
+            finishBtn.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+            finishBtn.GetComponent<Button>().interactable = true;
+            win.Play();
+        }
+            
 
         if (minCount > 0)
             bigStar1.GetComponent<SpriteBinState>().on = true;
@@ -164,7 +173,7 @@ public class UIStateController : MonoBehaviour
     string getLevelText(float time)
     {
         if (withSec)
-            return "LEVEL " + levelIndex + " :: " + (timeForLevel - Mathf.Floor(time)) + " SEC";
+            return "LEVEL " + levelIndex + " : " + (timeForLevel - Mathf.Floor(time)) + " SEC";
         else
             return "LEVEL " + levelIndex;
     }
