@@ -18,35 +18,35 @@ public class SignTracker : MonoBehaviour
     GameObject progressText;
 
     [SerializeField]
-    int firstStarAt = 3;
+    int firstStarAt = 10;
 
     [SerializeField]
-    int secondStarAt = 6;
+    int secondStarAt = 12;
 
-    public int total = 10;
+    [SerializeField]
+    int thirdStartAt = 15;
+    
     public int currentCount = 0;
     int prevCurrentCount = -1;
 
     
     void Update()
     {
-        if (currentCount > total)
-            currentCount = total;
-
         star1.GetComponent<SpriteBinState>().on = currentCount >= firstStarAt;
         star2.GetComponent<SpriteBinState>().on = currentCount >= secondStarAt;
-        star3.GetComponent<SpriteBinState>().on = currentCount == total;
+        star3.GetComponent<SpriteBinState>().on = currentCount >= thirdStartAt;
 
         if (prevCurrentCount != currentCount)
         {
-            progressText.GetComponent<TextMeshProUGUI>().text = currentCount + "/" + total;
+            int cap = currentCount > secondStarAt ? thirdStartAt : currentCount > firstStarAt ? secondStarAt : firstStarAt;
+            progressText.GetComponent<TextMeshProUGUI>().text = currentCount + "/" + cap;
             prevCurrentCount = currentCount;
         }
     }
 
     public int StarCount()
     {
-        return currentCount >= total        ? 3 : 
+        return currentCount >= thirdStartAt ? 3 : 
                currentCount >= secondStarAt ? 2 : 
                currentCount >= firstStarAt  ? 1 : 
                                               0 ;
