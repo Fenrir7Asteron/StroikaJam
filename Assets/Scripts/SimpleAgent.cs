@@ -13,9 +13,12 @@ public class SimpleAgent : MonoBehaviour
     public float delayBetweenStep = 0.3f;
     public float timeBeforeTired = 5f;
     public Animator animator;
+    
     public AudioSource workAudio;
     public AudioSource playerAudio;
     public AudioSource drinkAudio;
+    public AudioSource screamAudio;
+    public AudioSource openBottle;
     
     public Vector2 minPosForSleepPlace;
     public Vector2 maxPosForSleepPlace;
@@ -58,7 +61,7 @@ public class SimpleAgent : MonoBehaviour
         if (!_startSleepAnimatons && !_walking && !_atWork)
         {
             _startSleepAnimatons = true;
-            drinkAudio.Play();
+            StartCoroutine(PlayDrinkAudio());
             animator.SetBool("sleep", true);
         }
         
@@ -84,7 +87,15 @@ public class SimpleAgent : MonoBehaviour
         
         if (other.CompareTag("Player"))
         {
-            playerAudio.Play();
+            if (!playerAudio.isPlaying)
+            {
+                playerAudio.Play();
+            }
+
+            if (!screamAudio.isPlaying)
+            {
+                screamAudio.Play();
+            }
             _workedTime = 0f;
             _startSleepAnimatons = false;
             drinkAudio.Stop();
@@ -116,11 +127,6 @@ public class SimpleAgent : MonoBehaviour
         if (other.CompareTag("WorkZone"))
         {
             workZoneController.OutWorkZone(other.transform.GetInstanceID(), GetInstanceID());
-        }
-
-        if (other.CompareTag("Player"))
-        {
-            playerAudio.Stop();
         }
     }
 
@@ -182,6 +188,13 @@ public class SimpleAgent : MonoBehaviour
         float x = Random.Range(minPosForSleepPlace.x, maxPosForSleepPlace.x);
         float y = Random.Range(minPosForSleepPlace.y, maxPosForSleepPlace.y);
         return new Vector3(x, y, 0);
+    }
+
+    IEnumerator PlayDrinkAudio()
+    {
+        openBottle.Play();
+        yield return new WaitForSeconds(1.5f);
+        drinkAudio.Play();
     }
 
     protected virtual void StartWorkAnimation()
