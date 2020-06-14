@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class UIStateController : MonoBehaviour
 {
-    public string nextScene; 
+    public int nextScene; 
     public GameObject destMark;
     public GameObject buildbtn;
 

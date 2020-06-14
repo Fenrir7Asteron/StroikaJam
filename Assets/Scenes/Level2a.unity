@@ -769,8 +769,8 @@ GameObject:
   - component: {fileID: 290715398}
   - component: {fileID: 290715397}
   - component: {fileID: 290715400}
-  - component: {fileID: 290715396}
   - component: {fileID: 290715402}
+  - component: {fileID: 290715401}
   m_Layer: 0
   m_Name: worker_1
   m_TagString: Untagged
@@ -778,35 +778,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &290715396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 290715395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e9fe8ee474a33744a09af69f7159524, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wallTilemap: {fileID: 1286977931}
-  workZoneController: {fileID: 959124809}
-  delayBetweenStep: 0.15
-  timeBeforeTired: 5
-  animator: {fileID: 290715400}
-  workCollector: {fileID: 176945240}
-  timeForDoneWork: 4
-  workAudio: {fileID: 290715402}
-  playerAudios:
-  - {fileID: 2086374667}
-  - {fileID: 446459143}
-  - {fileID: 1448452746}
-  drinkAudio: {fileID: 759423297}
-  screamAudio: {fileID: 704010993}
-  openBottle: {fileID: 756995171}
-  minPosForSleepPlace: {x: -10, y: 0}
-  maxPosForSleepPlace: {x: 0, y: 2}
 --- !u!61 &290715397
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -920,6 +891,35 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &290715401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290715395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ae7b229f6b9df45a7d5844b18a0ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallTilemap: {fileID: 1286977931}
+  workZoneController: {fileID: 959124809}
+  delayBetweenStep: 0.15
+  timeBeforeTired: 5
+  animator: {fileID: 290715400}
+  workCollector: {fileID: 176945240}
+  timeForDoneWork: 4
+  workAudio: {fileID: 290715402}
+  playerAudios:
+  - {fileID: 2086374667}
+  - {fileID: 446459143}
+  - {fileID: 1448452746}
+  drinkAudio: {fileID: 759423297}
+  screamAudio: {fileID: 704010993}
+  openBottle: {fileID: 756995171}
+  minPosForSleepPlace: {x: -10, y: 0}
+  maxPosForSleepPlace: {x: 0, y: 2}
 --- !u!82 &290715402
 AudioSource:
   m_ObjectHideFlags: 0
@@ -930,7 +930,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b083b74f0796c3e46b300c3dd5fe22e3, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ea13139c1e362584db4ae1e5477e54e3, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -1822,8 +1822,8 @@ GameObject:
   - component: {fileID: 447208374}
   - component: {fileID: 447208373}
   - component: {fileID: 447208376}
-  - component: {fileID: 447208372}
   - component: {fileID: 447208378}
+  - component: {fileID: 447208377}
   m_Layer: 0
   m_Name: worker_2
   m_TagString: Untagged
@@ -1831,35 +1831,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &447208372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 447208371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e9fe8ee474a33744a09af69f7159524, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wallTilemap: {fileID: 1286977931}
-  workZoneController: {fileID: 959124809}
-  delayBetweenStep: 0.15
-  timeBeforeTired: 5
-  animator: {fileID: 447208376}
-  workCollector: {fileID: 176945240}
-  timeForDoneWork: 4
-  workAudio: {fileID: 447208378}
-  playerAudios:
-  - {fileID: 2086374667}
-  - {fileID: 446459143}
-  - {fileID: 1448452746}
-  drinkAudio: {fileID: 1710484730}
-  screamAudio: {fileID: 1680749240}
-  openBottle: {fileID: 798507111}
-  minPosForSleepPlace: {x: -10, y: 0}
-  maxPosForSleepPlace: {x: 0, y: 2}
 --- !u!61 &447208373
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1973,6 +1944,35 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &447208377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447208371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ae7b229f6b9df45a7d5844b18a0ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallTilemap: {fileID: 1286977931}
+  workZoneController: {fileID: 959124809}
+  delayBetweenStep: 0.15
+  timeBeforeTired: 5
+  animator: {fileID: 447208376}
+  workCollector: {fileID: 176945240}
+  timeForDoneWork: 4
+  workAudio: {fileID: 447208378}
+  playerAudios:
+  - {fileID: 2086374667}
+  - {fileID: 446459143}
+  - {fileID: 1448452746}
+  drinkAudio: {fileID: 1710484730}
+  screamAudio: {fileID: 1680749240}
+  openBottle: {fileID: 798507111}
+  minPosForSleepPlace: {x: -10, y: 0}
+  maxPosForSleepPlace: {x: 0, y: 2}
 --- !u!82 &447208378
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1983,7 +1983,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b083b74f0796c3e46b300c3dd5fe22e3, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ea13139c1e362584db4ae1e5477e54e3, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -5547,53 +5547,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!1 &1105889877
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1105889879}
-  - component: {fileID: 1105889878}
-  m_Layer: 0
-  m_Name: Game Controller
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1105889878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1105889877}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c128f82ed32dc8c44bd95bd1ca3beb5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  workZones:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
---- !u!4 &1105889879
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1105889877}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1147375936
 GameObject:
   m_ObjectHideFlags: 0
@@ -7906,7 +7859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ced17c24c09df2c508bcb573d94761e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextScene: Level1
+  nextScene: 0
   destMark: {fileID: 2018702084}
   buildbtn: {fileID: 1415484764}
   levelIndex: 1
@@ -8283,8 +8236,8 @@ GameObject:
   - component: {fileID: 1448662645}
   - component: {fileID: 1448662643}
   - component: {fileID: 1448662642}
-  - component: {fileID: 1448662641}
   - component: {fileID: 1448662647}
+  - component: {fileID: 1448662641}
   m_Layer: 0
   m_Name: worker_0
   m_TagString: Untagged
@@ -8301,7 +8254,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1448662640}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e9fe8ee474a33744a09af69f7159524, type: 3}
+  m_Script: {fileID: 11500000, guid: 79ae7b229f6b9df45a7d5844b18a0ce1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   wallTilemap: {fileID: 1286977931}
@@ -8444,7 +8397,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b083b74f0796c3e46b300c3dd5fe22e3, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ea13139c1e362584db4ae1e5477e54e3, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -8858,10 +8811,10 @@ RectTransform:
   m_Father: {fileID: 468407902}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 4000, y: 4000}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1582541796
 GameObject:
