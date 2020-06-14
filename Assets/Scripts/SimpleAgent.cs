@@ -34,7 +34,7 @@ public class SimpleAgent : MonoBehaviour
 
     private void Start()
     {
-        transform.position = getPath(Vector3.zero)[0]; // fix start position
+        transform.position = getPath(transform.position)[0]; // fix start position
         _playerAudio = playerAudios[0];
     }
 
