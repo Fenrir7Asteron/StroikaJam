@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     private Tween curMove;
     private bool needWaypoint = true;
 
+    private Vector3 myPrevPos;
+
     Seeker seeker;
 
     Path path;
@@ -27,6 +29,7 @@ public class PlayerController : MonoBehaviour
     {
         seeker = GetComponent<Seeker>();
         prevTargetPos = target.transform.position;
+        myPrevPos = transform.position;
 
         //InvokeRepeating("UpdatePath", 0.0f, 0.5f);
         //UpdatePath();
@@ -56,6 +59,35 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        var nextDir = (Vector2)(transform.position - myPrevPos);
+        Quaternion rot = transform.localRotation;
+        if (nextDir.magnitude >= 0.00001f)
+        {
+            nextDir.Normalize();
+            float[] dirs = new float[4];
+            dirs[0] = (nextDir - Vector2.right).magnitude;
+            dirs[1] = (nextDir - Vector2.up).magnitude;
+            dirs[2] = (nextDir - Vector2.left).magnitude;
+            dirs[3] = (nextDir - Vector2.down).magnitude;
+
+            int minIndex = 0;
+            for (int i = 1; i < 4; i++)
+                if (dirs[minIndex] > dirs[i])
+                    minIndex = i;
+
+            if (minIndex == 0)
+                rot = Quaternion.Euler(0, 0, 0);
+            else if (minIndex == 1)
+                rot = Quaternion.Euler(0, 0, 90);
+            else if (minIndex == 2)
+                rot = Quaternion.Euler(0, 0, 180);
+            else if (minIndex == 3)
+                rot = Quaternion.Euler(0, 0, 270);
+        }
+
+        myPrevPos = transform.position;
+        transform.localRotation = rot;
+
         if ((target.transform.position - prevTargetPos).magnitude > 0.0001f)
         {
             UpdatePath();
@@ -64,7 +96,10 @@ public class PlayerController : MonoBehaviour
         prevTargetPos = target.transform.position;
 
         if (path == null)
+        {
+            animator.SetBool("walk", false);
             return;
+        }
 
         if (currentWaypoint + 1 == path.vectorPath.Count)
         {
@@ -94,19 +129,6 @@ public class PlayerController : MonoBehaviour
                 .SetEase(Ease.Linear)
                 .OnKill(() => { needWaypoint = true; });
             Debug.Log("DOne");
-
-            var nextDir = ((Vector2)(dest - transform.position)).normalized;
-            Quaternion rot = transform.localRotation;
-            if ((nextDir - Vector2.right).magnitude < 0.1f)
-                rot = Quaternion.Euler(0, 0, 0);
-            else if ((nextDir - Vector2.up).magnitude < 0.1f)
-                rot = Quaternion.Euler(0, 0, 90);
-            else if ((nextDir - Vector2.left).magnitude < 0.1f)
-                rot = Quaternion.Euler(0, 0, 180);
-            else if ((nextDir - Vector2.down).magnitude < 0.1f)
-                rot = Quaternion.Euler(0, 0, 270);
-
-            transform.localRotation = rot;
         }
     }
 }
