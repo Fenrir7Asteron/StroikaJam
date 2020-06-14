@@ -94,6 +94,19 @@ public class PlayerController : MonoBehaviour
                 .SetEase(Ease.Linear)
                 .OnKill(() => { needWaypoint = true; });
             Debug.Log("DOne");
+
+            var nextDir = ((Vector2)(dest - transform.position)).normalized;
+            Quaternion rot = transform.localRotation;
+            if ((nextDir - Vector2.right).magnitude < 0.1f)
+                rot = Quaternion.Euler(0, 0, 0);
+            else if ((nextDir - Vector2.up).magnitude < 0.1f)
+                rot = Quaternion.Euler(0, 0, 90);
+            else if ((nextDir - Vector2.left).magnitude < 0.1f)
+                rot = Quaternion.Euler(0, 0, 180);
+            else if ((nextDir - Vector2.down).magnitude < 0.1f)
+                rot = Quaternion.Euler(0, 0, 270);
+
+            transform.localRotation = rot;
         }
     }
 }
