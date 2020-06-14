@@ -105,6 +105,7 @@ public class UIStateController : MonoBehaviour
     // This is the greatest amount of copypaste i've ever done :( 
     public void FinishLevel()
     {
+        Time.timeScale = 0.0f;
         var fadeImg = fade.GetComponent<Image>();
         DOTween.To(()=> fadeImg.color.a,
                     x=> fadeImg.color = new Color(fadeImg.color.r, fadeImg.color.g, fadeImg.color.b, x),
