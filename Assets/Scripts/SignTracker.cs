@@ -38,7 +38,7 @@ public class SignTracker : MonoBehaviour
 
         if (prevCurrentCount != currentCount)
         {
-            int cap = currentCount > secondStarAt ? thirdStartAt : currentCount > firstStarAt ? secondStarAt : firstStarAt;
+            int cap = currentCount >= secondStarAt ? thirdStartAt : currentCount >= firstStarAt ? secondStarAt : firstStarAt;
             progressText.GetComponent<TextMeshProUGUI>().text = currentCount + "/" + cap;
             prevCurrentCount = currentCount;
         }
