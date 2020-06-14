@@ -6,6 +6,8 @@ public class MoveToClick : MonoBehaviour
 {
     public Camera cam;
 
+    public Vector3 offset;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +24,7 @@ public class MoveToClick : MonoBehaviour
             newPos.y = Mathf.Round(newPos.y);
             newPos.z = transform.position.z;
 
-            transform.position = newPos;
+            transform.position = newPos + offset;
 
         }
         
